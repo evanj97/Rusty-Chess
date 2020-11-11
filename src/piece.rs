@@ -23,6 +23,12 @@ impl Piece
         Piece { piece_type, player }
     }
 
+    pub fn piece_type(&self) -> PieceType {
+        self.piece_type
+    }
+    pub fn player(&self) -> bool {
+        self.player
+    }
 
     pub fn to_string(self) -> String
     {
