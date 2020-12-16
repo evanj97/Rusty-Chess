@@ -9,10 +9,6 @@ fn main()
     let mut board = board::BoardState::new();
 
     board.reset();
-
     board.draw_board();
 }
-
-
-
 
