@@ -6,6 +6,7 @@ use crate::piece::PieceType::Empty;
 
 use std::collections::HashMap;
 use std::num;
+use std::ops::Range;
 
 
 pub struct BoardState
@@ -83,20 +84,20 @@ impl BoardState
     // returns type of piece at (x,y) as a enumerated type of PieceType
     pub fn piece_type_at(&self, x: u8, y: u8) -> PieceType
     {
-        if let Some(asdf) = self.board.get(&(x + (8 * y)))
+        return if let Some(piece) = self.board.get(&(x + (8 * y)))
         {
-            return asdf.piece_type();
+            piece.piece_type()
         } else {
-            return PieceType::Empty;
+            PieceType::Empty
         }
     }
 
     // returns the player (0 or 1) who owns the piece at (x, y) or -1 if no piece at (x, y)
     pub fn piece_player_at(&self, x: u8, y: u8) -> i8
     {
-        if let Some(asdf) = self.board.get(&(x + (8 * y)))
+        if let Some(piece) = self.board.get(&(x + (8 * y)))
         {
-            if asdf.player() { 1 } else { 0 }
+            if piece.player() { 1 } else { 0 }
         } else {
             return -1;
         }
@@ -124,7 +125,7 @@ impl BoardState
 
     fn move_pawn(&mut self, x: u8, y: u8, x2: u8, y2: u8) -> bool
     {
-        if self.is_valid_move_pawn(x, y, x2, y2)
+        return if self.is_valid_move_pawn(x, y, x2, y2)
         {
             if let Some(temp) = self.board.remove(&(x + (8 * y)))
             {
@@ -133,23 +134,78 @@ impl BoardState
 
                 true
             } else { false }
-        } else { false }
+        } else { false };
     }
 
     fn move_rook(&mut self, x: u8, y: u8, x2: u8, y2: u8) -> bool
-    { false }
+    {
+        return if self.is_valid_move_rook(x, y, x2, y2)
+        {
+            if let Some(temp) = self.board.remove(&(x + (8 * y)))
+            {
+                self.board.insert((x2 + (8 * y2)), temp);
+
+
+                true
+            } else { false }
+        } else { false };
+    }
 
     fn move_knight(&mut self, x: u8, y: u8, x2: u8, y2: u8) -> bool
-    { false }
+    {
+        return if self.is_valid_move_knight(x, y, x2, y2)
+        {
+            if let Some(temp) = self.board.remove(&(x + (8 * y)))
+            {
+                self.board.insert((x2 + (8 * y2)), temp);
+
+
+                true
+            } else { false }
+        } else { false };
+    }
 
     fn move_bishop(&mut self, x: u8, y: u8, x2: u8, y2: u8) -> bool
-    { false }
+    {
+        return if self.is_valid_move_bishop(x, y, x2, y2)
+        {
+            if let Some(temp) = self.board.remove(&(x + (8 * y)))
+            {
+                self.board.insert((x2 + (8 * y2)), temp);
+
+
+                true
+            } else { false }
+        } else { false };
+    }
 
     fn move_king(&mut self, x: u8, y: u8, x2: u8, y2: u8) -> bool
-    { false }
+    {
+        return if self.is_valid_move_king(x, y, x2, y2)
+        {
+            if let Some(temp) = self.board.remove(&(x + (8 * y)))
+            {
+                self.board.insert((x2 + (8 * y2)), temp);
+
+
+                true
+            } else { false }
+        } else { false };
+    }
 
     fn move_queen(&mut self, x: u8, y: u8, x2: u8, y2: u8) -> bool
-    { false }
+    {
+        return if self.is_valid_move_queen(x, y, x2, y2)
+        {
+            if let Some(temp) = self.board.remove(&(x + (8 * y)))
+            {
+                self.board.insert((x2 + (8 * y2)), temp);
+
+
+                true
+            } else { false }
+        } else { false };
+    }
 
 
     pub fn is_valid_move(&self, x: u8, y: u8, x2: u8, y2: u8) -> bool
@@ -201,7 +257,7 @@ impl BoardState
                     else { false }
                 }
                 // if attacking diagonally
-                else if (x - x2 == 1 || x2 - x == 1) && y + 1 == y2
+                else if abs_dif(x, x2) == 1 && y + 1 == y2
                 {
                     return self.piece_player_at(x2, y2) == 1;
                 } else { false }
@@ -239,7 +295,7 @@ impl BoardState
         if x2 < 0 || x2 > 7 || y2 < 0 || y2 > 7
         { return false; } // if movement outside of board bounds
 
-        if x == x2 // if vertically aligned
+        return if x == x2 // if vertically aligned
         {
             for i in y + 1..y2
             {
@@ -248,7 +304,7 @@ impl BoardState
             }
 
             // if path to destination is empty AND destination is empty OR enemy, then move is valid
-            if self.piece_player_at(x2, y2) != self.piece_player_at(x, y) { return true; } else { return false; }
+            if self.piece_player_at(x2, y2) != self.piece_player_at(x, y) { true } else { false }
         } else if y == y2 // if horizontally aligned
         {
             for i in x + 1..x2
@@ -258,7 +314,7 @@ impl BoardState
             }
 
             // if path to destination is empty AND destination is empty OR enemy, then move is valid
-            if self.piece_player_at(x2, y2) != self.piece_player_at(x, y) { return true; } else { return false; }
+            return if self.piece_player_at(x2, y2) != self.piece_player_at(x, y) { true } else { false }
         } else { false } // if not aligned, false
 
 
@@ -283,13 +339,13 @@ impl BoardState
         // can move in L pattern in any direction, jumping over pieces, can only take enemy player piece
 
         // if L pattern away
-        if (abs_dif(x, x2) == 1 && abs_dif(y, y2) == 2) || (abs_dif(x, x2) == 2 && abs_dif(y, y2) == 1)
+        return if (abs_dif(x, x2) == 1 && abs_dif(y, y2) == 2) || (abs_dif(x, x2) == 2 && abs_dif(y, y2) == 1)
         {
             if self.piece_player_at(x2, y2) != self.piece_player_at(x, y)
             {
-                return true;
-            } else { return false; }
-        } else { return false; }
+                true
+            } else { false }
+        } else { false }
 
 
         // if (x2, y2) is L jump away, and destination is empty or enemy
@@ -300,15 +356,27 @@ impl BoardState
 
     fn is_valid_move_bishop(&self, x: u8, y: u8, x2: u8, y2: u8) -> bool
     {
-        if x2 < 0 || x2 > 7 || y2 < 0 || y2 > 7
-        { return false; } // if movement outside of board bounds
+        if x2 < 0 || x2 > 7 || y2 < 0 || y2 > 7 { return false; } // if movement outside of board bounds
+
+        else if x == x2 && y == y2 { return false; } // if destination == origin
 
         if abs_dif(x, x2) == abs_dif(y, y2)
         {
             // if every space between origin and destination is empty
 
-            if x2 > x && y2 > y
-            {}
+            let mut temp_x: Range<u8>;
+            let mut temp_y: Range<u8>;
+
+            if x2 < x { temp_x = (x - 1)..x2; } else { temp_x = (x + 1)..x2; }
+
+            if y2 < y { temp_y = (y - 1)..y2; } else { temp_y = (y + 1)..y2; }
+
+            for (X, Y) in temp_x.zip(temp_y) // check every square between origin and destination
+            {
+                if self.piece_type_at(X, Y) != Empty { return false; }
+            }
+
+            return if self.piece_player_at(x2, y2) != self.piece_player_at(x, y) { true } else { false }
 
             // AND if destination is empty or enemy
         }
@@ -324,13 +392,16 @@ impl BoardState
     {
         // can move 8 ways, one space, can only take enemy player piece
 
-        if abs_dif(x, x2) <= 1 && abs_dif(y, y2) <= 1 // if within 1 square
+        if x2 < 0 || x2 > 7 || y2 < 0 || y2 > 7
+        { return false; } // if movement outside of board bounds
+
+        return if abs_dif(x, x2) <= 1 && abs_dif(y, y2) <= 1 // if within 1 square
         {
             if self.piece_player_at(x2, y2) != self.piece_player_at(x, y) // if destination is empty or enemy piece
             {
-                return true;
-            } else { return false; }
-        } else { return false; }
+                true
+            } else { false }
+        } else { false }
 
 
         // if (x2, y2) is within 1 square, and is empty or enemy
@@ -343,14 +414,18 @@ impl BoardState
     {
         // can move 8 ways, until contact is made, can only take enemy player piece
 
+
+        return if self.is_valid_move_bishop(x, y, x2, y2) || self.is_valid_move_rook(x, y, x2, y2)
+        {
+            true
+        } else { false }
+
         // if (x2, y2) is along horizontal/vertical
         //      reuse Rook logic
         // if (x2, y2) is along diagonal
         //      reuse bishop logic
         // else
         //      false
-
-        false
     }
 }
 
