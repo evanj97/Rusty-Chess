@@ -32,9 +32,9 @@ impl Piece
 
     pub fn to_string(self) -> String
     {
-        if !self.player
+        return if !self.player
         {
-            return match self.piece_type
+            match self.piece_type
             {
                 PieceType::Pawn => "1P".to_string(),
                 PieceType::Rook => "1R".to_string(),
@@ -43,9 +43,9 @@ impl Piece
                 PieceType::Queen => "1Q".to_string(),
                 PieceType::King => "1K".to_string(),
                 PieceType::Empty => " ".to_string(),
-            };
+            }
         } else {
-            return match self.piece_type
+            match self.piece_type
             {
                 PieceType::Pawn => "2P︎".to_string(),
                 PieceType::Rook => "2R".to_string(),
@@ -54,7 +54,7 @@ impl Piece
                 PieceType::Queen => "2Q".to_string(),
                 PieceType::King => "2K".to_string(),
                 PieceType::Empty => " ".to_string(),
-            };
+            }
         }
     }
 }
