@@ -39,7 +39,7 @@ fn main()
         match vector.get(0)
         {
             Some(&"move") => { call_move(&mut board, &vector); },
-            Some(&"is_valid_move") => { call_valid_move(&mut board, &vector); },
+            Some(&"valid_move") => { call_valid_move(&mut board, &vector); },
             Some(&"draw") => { board.draw_board(); },
             Some(&"reset") => {
                 board.reset();
@@ -51,7 +51,7 @@ fn main()
                 return;
             }
             _ => {
-                println!("unknown command");
+                println!("unknown command, try help");
                 continue;
             }
         }

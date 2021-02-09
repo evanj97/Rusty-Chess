@@ -60,10 +60,12 @@ impl BoardState
 
     pub fn draw_board(&self)
     {
-        println!("-----------------------------------------");
+        println!("    0    1    2    3    4    5    6    7   ");
+        println!("  -----------------------------------------");
 
         for y in 0u8..8
         {
+            print!("{} ", y);
             for x in 0u8..8
             {
                 if let Some(icon) = self.board.get(&(x + (8 * y)))
@@ -74,7 +76,7 @@ impl BoardState
                 }
             }
             println!("|");
-            println!("-----------------------------------------");
+            println!("  -----------------------------------------");
         }
     }
 }
@@ -129,6 +131,7 @@ impl BoardState
         {
             if let Some(temp) = self.board.remove(&(x + (8 * y)))
             {
+                self.board.remove(&(x2 + (8 * y2)));
                 self.board.insert((x2 + (8 * y2)), temp);
 
 
@@ -143,6 +146,7 @@ impl BoardState
         {
             if let Some(temp) = self.board.remove(&(x + (8 * y)))
             {
+                self.board.remove(&(x2 + (8 * y2)));
                 self.board.insert((x2 + (8 * y2)), temp);
 
 
@@ -157,6 +161,7 @@ impl BoardState
         {
             if let Some(temp) = self.board.remove(&(x + (8 * y)))
             {
+                self.board.remove(&(x2 + (8 * y2)));
                 self.board.insert((x2 + (8 * y2)), temp);
 
 
@@ -171,6 +176,7 @@ impl BoardState
         {
             if let Some(temp) = self.board.remove(&(x + (8 * y)))
             {
+                self.board.remove(&(x2 + (8 * y2)));
                 self.board.insert((x2 + (8 * y2)), temp);
 
 
@@ -185,6 +191,7 @@ impl BoardState
         {
             if let Some(temp) = self.board.remove(&(x + (8 * y)))
             {
+                self.board.remove(&(x2 + (8 * y2)));
                 self.board.insert((x2 + (8 * y2)), temp);
 
 
@@ -199,6 +206,7 @@ impl BoardState
         {
             if let Some(temp) = self.board.remove(&(x + (8 * y)))
             {
+                self.board.remove(&(x2 + (8 * y2)));
                 self.board.insert((x2 + (8 * y2)), temp);
 
 
