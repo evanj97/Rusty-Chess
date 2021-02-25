@@ -18,6 +18,7 @@ fn main()
         valid_move <origin X> <origin Y> <destination X> <destination Y>\n\
         draw\n\
         reset\n\
+        exit\n\
         help";
 
     loop

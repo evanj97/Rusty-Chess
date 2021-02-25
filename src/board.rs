@@ -288,7 +288,7 @@ impl BoardState
                     else { false }
                 }
                 // if attacking diagonally
-                else if (x - x2 == 1 || x2 - x == 1) && y - 1 == y2
+                else if abs_dif(x, x2) == 1 && y - 1 == y2
                 {
                     return self.piece_player_at(x2, y2) == 1;
                 } else { false }
